@@ -1,0 +1,16 @@
+pushgateway:
+  image: prom/pushgateway
+  container_name: local-pushgateway
+  ports:
+    - 9091:9091
+
+prometheus:
+  image: prom/prometheus
+  container_name: local-prometheus
+  ports:
+    - 9090:9090
+  links:
+    - pushgateway:pushgateway
+  volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    - ./rules.yml:/etc/prometheus/rules.yml
