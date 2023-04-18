@@ -7,10 +7,8 @@ on:
     types: [created]
 
 jobs:
-deploy:
-
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
