@@ -53,9 +53,7 @@ jobs:
       #----------------------------------------------
       - name: Run tests
         run: |
-          source .venv/bin/activate
-          pytest tests/
-          coverage report
+          poetry run pytest
       #----------------------------------------------
       #              configure testpipy and build package
       #----------------------------------------------
