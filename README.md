@@ -1,3 +1,4 @@
+[![Publish Python 🐍 distributions 📦 to PyPI and TestPyPI with poetry](https://github.com/CKristensen/pushgateway_py_client/actions/workflows/publish-python-poetry.yml/badge.svg?branch=main)](https://github.com/CKristensen/pushgateway_py_client/actions/workflows/publish-python-poetry.yml)
 # Simple Pushgateway Python Client
 Python client for Pushgateway.  
 Pushgateway allows you to track state on specific metrics.  
