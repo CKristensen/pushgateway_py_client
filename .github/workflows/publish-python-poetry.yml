@@ -71,7 +71,7 @@ jobs:
       - name: Configure PyPI
         run: |
           poetry config repositories.pypi https://upload.pypi.org/legacy/
-          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          poetry config pypi-token.pypi ${{ secrets.PYPI_SECRET }}
       - name: Build, Publish package to PyPI
       # publish if last commit message contains "publish"
         if: contains(github.event.head_commit.message, 'publish')
