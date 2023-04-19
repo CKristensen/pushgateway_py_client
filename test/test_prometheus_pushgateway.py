@@ -1,5 +1,5 @@
 from time import sleep
-from pushgateway_py_client import MetricsClient
+from src.pushgateway_py_client import MetricsClient
 import unittest
 
 executions = []
