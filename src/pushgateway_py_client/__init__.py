@@ -1,8 +1,9 @@
 import time
-from prometheus_client import CollectorRegistry, Gauge, Counter, push_to_gateway
+from prometheus_client import CollectorRegistry, Gauge, Counter, Histogram, push_to_gateway
 
 global_counter = {}
 global_gauges = {}
+global_histograms = {}
 
 
 class MetricsClient:
@@ -18,6 +19,7 @@ class MetricsClient:
         self._push_function = push_function
         self._gauges = (lambda: global_gauges)()
         self._counters = (lambda: global_counter)()
+        self._histograms = (lambda: global_histograms)()
 
     def __push(self):
         """
@@ -34,7 +36,7 @@ class MetricsClient:
         :param value:
         :return:
         """
-        clabelnames = list(labels.keys())
+        counter_label_names = list(labels.keys())
 
         def __add_counter(metric_name: str, help_text: str):
             """
@@ -48,7 +50,7 @@ class MetricsClient:
                     metric_name,
                     help_text,
                     registry=self._registry,
-                    labelnames=clabelnames,
+                    labelnames=counter_label_names,
                 )
 
         def __increment_counter(metric_name: str, value_: float = 1):
@@ -73,7 +75,7 @@ class MetricsClient:
         :return:
         """
 
-        glabelnames = list(labels.keys())
+        gauge_label_names = list(labels.keys())
 
         def __add_gauge(metric_name: str, help_text: str):
             """
@@ -87,7 +89,7 @@ class MetricsClient:
                     metric_name,
                     help_text,
                     registry=self._registry,
-                    labelnames=glabelnames,
+                    labelnames=gauge_label_names,
                 )
 
         def __set_gauge(metric_name: str, metric_value: float):
@@ -101,6 +103,28 @@ class MetricsClient:
 
         __add_gauge(metric, "Gauge metric")
         __set_gauge(metric, value)
+        self.__push()
+
+    def histogram(self, metric: str, value: float, labels: dict = {}, buckets = None):
+        """
+        Push a histogram metric to the pushgateway
+        :param buckets:
+        :param labels:
+        :param metric:
+        :param value:
+        :return:
+        """
+
+        histogram_label_names = list(labels.keys())
+        if metric not in global_histograms:
+            global_histograms[metric] = Histogram(
+                metric,
+                "Histogram metric",
+                registry=self._registry,
+                labelnames=histogram_label_names,
+                buckets=Histogram.DEFAULT_BUCKETS if not buckets else buckets,
+            )
+        global_histograms[metric].labels(**labels).observe(value)
         self.__push()
 
     def timeit(self, metric, labels):
