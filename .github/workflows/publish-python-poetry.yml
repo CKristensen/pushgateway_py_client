@@ -61,6 +61,19 @@ jobs:
         run: |
           poetry config repositories.testpypi https://test.pypi.org/legacy/
           poetry config pypi-token.testpypi ${{ secrets.TEST_PYPI_TOKEN }}
-      - name: Build, Publish package to TestPyPI 
+      - name: Build, Publish package to TestPyPI
+        if: contains(github.event.head_commit.message, 'publish')
         run: |
           poetry publish --repository testpypi --build
+      #----------------------------------------------
+      #              configure pipy and build package
+      #----------------------------------------------
+      - name: Configure PyPI
+        run: |
+          poetry config repositories.pypi https://upload.pypi.org/legacy/
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+      - name: Build, Publish package to PyPI
+      # publish if last commit message contains "publish"
+        if: contains(github.event.head_commit.message, 'publish')
+        run: |
+          poetry publish --build
