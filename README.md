@@ -29,7 +29,7 @@ def fake_app() -> int:
 ```
 
 ### Note:
-If your application is multithreaded or multiprocessed you should add a label that can distinguish the different threads/processes.  
+If the same meric is running different instances at the same time you should add a label that can distinguish the different instances.  
 This is because the pushgateway will only keep the most recent value for a metric with the same name and labels.
 ````
 # Example
